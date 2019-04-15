@@ -1,2 +1,7 @@
 # ingenieria-software-lab1
-Laboratorio #1 del curso de Ingenieria de Software
+
+Nommbre: Joan Manuel Diaz Salazar
+Carne: 1290-15-4845
+
+
+Proyecto clonado de: https://github.com/jbarillasgarcia/ingenieria-software-lab1
