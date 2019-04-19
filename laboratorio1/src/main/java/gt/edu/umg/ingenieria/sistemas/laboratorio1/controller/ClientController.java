@@ -22,11 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/clientes")
 public class ClientController {
 
-    //@Autowired
-    //private ReportService reportService;
+    @Autowired
+    private ReportService reportService;
     
     @Autowired 
     private ClientService clientService;
+    
     
     @GetMapping("/buscarTodos")
     public List<Client> buscarTodos(){
@@ -61,5 +62,10 @@ public class ClientController {
     @PutMapping("/editarCliente/{id}/{firstName}/{lastName}")
     public Client editarClienteNombreApellido(@PathVariable(required = true) long id, @PathVariable(required = true) String firstName, @PathVariable(required = true) String lastName){
         return this.clientService.editarClienteNombreApellido(id, firstName, lastName);
+    }
+    
+    @GetMapping("/generarReporteClientes")
+    public String generarReporteClientes(){
+        return this.reportService.creaReporte();
     }
 }

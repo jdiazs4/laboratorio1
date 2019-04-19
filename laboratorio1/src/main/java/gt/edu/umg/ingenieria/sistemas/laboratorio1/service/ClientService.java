@@ -21,8 +21,23 @@ public class ClientService {
         return (List<Client>) this.cr.findAll();
     }
     
-    public Client crearClient(Client client){
-        return this.cr.save(client);
+    public Client crearClient(Client client) throws Exception{
+        
+        String nit = client.getNit();
+        String nombre = client.getFirstName();
+        String apellido =  client.getLastName();
+        
+        if(nit.length() <=10 && validarNit(nit)){
+            nombre = nombre.substring(0,1).toUpperCase() + nombre.substring(1).toLowerCase();
+            client.setFirstName(nombre);
+            
+            apellido = apellido.substring(0,1).toUpperCase() + apellido.substring(1).toLowerCase();
+            client.setLastName(apellido);
+            
+            return this.cr.save(client);
+        }else{
+            throw new Exception("NIT invalido.");
+        }
     }
     
     public Client buscarPorNit(String nit){
@@ -67,5 +82,16 @@ public class ClientService {
         client.setFirstName(firstName);
         client.setLastName(lastName);
         return this.cr.save(client);
+    }
+    
+    private boolean validarNit(String nit){
+        boolean resultado;
+        try {
+            Integer.parseInt(nit);
+            resultado=true;
+        } catch (Exception e) {
+            resultado=false;
+        }
+        return resultado;
     }
 }
