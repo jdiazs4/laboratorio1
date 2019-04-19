@@ -45,7 +45,7 @@ public class ClientController {
     }
     
     @PostMapping("/crearCliente")
-    public Client crearCliente(@RequestBody(required = true) Client client){
+    public Client crearCliente(@RequestBody(required = true) Client client) throws Exception{
         return this.clientService.crearClient(client);
     }
     
