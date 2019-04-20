@@ -2,6 +2,7 @@ package gt.edu.umg.ingenieria.sistemas.laboratorio1.service;
 
 import gt.edu.umg.ingenieria.sistemas.laboratorio1.dao.ClientRepository;
 import gt.edu.umg.ingenieria.sistemas.laboratorio1.model.Client;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,15 +29,23 @@ public class ClientService {
         String nit = client.getNit();
         String nombre = client.getFirstName();
         String apellido =  client.getLastName();
+        Date birthDate = client.getBirthDate();
         
         if(nit.length() <=10 && validarNit(nit)){
-            nombre = nombre.substring(0,1).toUpperCase() + nombre.substring(1).toLowerCase();
-            client.setFirstName(nombre);
             
-            apellido = apellido.substring(0,1).toUpperCase() + apellido.substring(1).toLowerCase();
-            client.setLastName(apellido);
-            
-            return this.cr.save(client);
+            if(validarEdad(birthDate)){
+                
+                nombre = nombre.substring(0,1).toUpperCase() + nombre.substring(1).toLowerCase();
+                client.setFirstName(nombre);
+
+                apellido = apellido.substring(0,1).toUpperCase() + apellido.substring(1).toLowerCase();
+                client.setLastName(apellido);
+
+                return this.cr.save(client);
+                
+            }else{
+                throw new Exception("Lo sentimos. El sistema solo permite el registro de usuarios mayores de edad.");
+            }
         }else{
             throw new Exception("NIT invalido.");
         }
@@ -54,6 +63,7 @@ public class ClientService {
                 client.setNit(c.getNit());
                 client.setPhone(c.getPhone());
                 client.setAddress(c.getAddress());
+                client.setBirthDate(c.getBirthDate());
             }
         }
         
@@ -61,12 +71,7 @@ public class ClientService {
     }
     
     public List<Client> buscarPorNombreApellido(String query){
-         List<Client> list = (List<Client>) this.cr.findAll();
-         
-         list.stream().filter(client -> (client.getFirstName() + " " + client.getLastName())
-                 .matches(query)).collect(Collectors.toList());
-          
-         return list;
+        return (List<Client>) this.cr.buscarPorNombreApellido(query.replace("*", "%"));
     }
     
     public Client editarCliente(Client client){
@@ -95,5 +100,15 @@ public class ClientService {
             resultado=false;
         }
         return resultado;
+    }
+    
+    private boolean validarEdad(Date birthDate){
+        Date fechaActual = new Date();
+        int dias=(int) ((fechaActual.getTime()-birthDate.getTime())/86400000);
+        int year = dias/365;
+        
+        if(year>=18)
+        return true;
+        return false;
     }
 }
