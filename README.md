@@ -24,7 +24,7 @@ SERVICIOS
  
  - Crear cliente
  
- -Editar cliente
+ - Editar cliente
  
  - Reporte de cliente
 
